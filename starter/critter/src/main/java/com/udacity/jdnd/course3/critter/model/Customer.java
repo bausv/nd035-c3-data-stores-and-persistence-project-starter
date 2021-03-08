@@ -2,6 +2,7 @@ package com.udacity.jdnd.course3.critter.model;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,7 +13,7 @@ public class Customer extends Person {
     private String phoneNumber;
     private String notes;
 
-    @OneToMany(mappedBy = "owner", cascade = {CascadeType.ALL}, orphanRemoval = true)
+    @OneToMany(mappedBy = "owner", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.EAGER)
     private Set<Pet> pets = new HashSet<>();
 
     public Customer() {

@@ -1,6 +1,8 @@
 package com.udacity.jdnd.course3.critter.user;
 
+import com.google.common.collect.Sets;
 import com.udacity.jdnd.course3.critter.mapper.EmployeeMapper;
+import com.udacity.jdnd.course3.critter.model.Employee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,7 +42,7 @@ public class UserController {
 
     @GetMapping("/customer/pet/{petId}")
     public CustomerDTO getOwnerByPet(@PathVariable long petId){
-        throw new UnsupportedOperationException();
+        return customerService.getOwnerByPet(petId);
     }
 
     @PostMapping("/employee")
@@ -54,13 +56,15 @@ public class UserController {
     }
 
     @PutMapping("/employee/{employeeId}")
-    public void setAvailability(@RequestBody Set<DayOfWeek> daysAvailable, @PathVariable long employeeId) {
-        throw new UnsupportedOperationException();
+    public void setAvailability(@RequestBody Set<DayOfWeek> daysAvailable, @PathVariable long employeeId) throws EmployeeNotFoundException {
+        EmployeeDTO employee = employeeService.getEmployee(employeeId);
+        employee.setDaysAvailable(daysAvailable);
+        employeeService.saveEmployee(employee);
     }
 
     @GetMapping("/employee/availability")
     public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
-        throw new UnsupportedOperationException();
+        return employeeService.findEmployeesForService(employeeDTO);
     }
 
 }

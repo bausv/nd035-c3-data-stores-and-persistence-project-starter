@@ -24,7 +24,9 @@ public class EmployeeMapper {
         dto.setId(e.getId() != null ? e.getId() : -1);
         dto.setName(e.getName());
         dto.setSkills(e.getSkills().stream().map(s -> s.getSkill()).collect(Collectors.toSet()));
-        dto.setDaysAvailable(e.getDaysAvailable().stream().map(a -> a.getDayOfWeek()).collect(Collectors.toSet()));
+        if (e.getDaysAvailable() != null) {
+            dto.setDaysAvailable(e.getDaysAvailable().stream().map(a -> a.getDayOfWeek()).collect(Collectors.toSet()));
+        }
         return dto;
     }
 

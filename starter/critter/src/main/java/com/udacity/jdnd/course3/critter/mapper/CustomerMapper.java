@@ -7,10 +7,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomerMapper {
 
-    private PetMapper petMapper;
+    public CustomerMapper() {
 
-    public CustomerMapper(PetMapper petMapper) {
-        this.petMapper = petMapper;
     }
 
     public Customer dtoToEntity(CustomerDTO dto) {
@@ -21,7 +19,6 @@ public class CustomerMapper {
         if (dto.getId() > 0) {
             c.setId(dto.getId());
         }
-        c.setPets(petMapper.idListToPetSet(dto.getPetIds()));
         return c;
     }
 
@@ -33,7 +30,6 @@ public class CustomerMapper {
         dto.setName(c.getName());
         dto.setNotes(c.getNotes());
         dto.setPhoneNumber(c.getPhoneNumber());
-        dto.setPetIds(petMapper.petSetToIdList(c.getPets()));
         return dto;
     }
 }

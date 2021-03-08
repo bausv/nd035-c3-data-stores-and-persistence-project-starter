@@ -16,18 +16,18 @@ public class Employee extends Person {
     @ManyToMany
     @JoinTable(
             name = "employee_skill",
-            joinColumns = @JoinColumn(name = "skill_id"),
-            inverseJoinColumns = @JoinColumn(name = "employee_id")
+            joinColumns = @JoinColumn(name = "employee_id"),
+            inverseJoinColumns = @JoinColumn(name = "skill_id")
     )
     private Set<Skill> skills = new HashSet<>();
 
     @ManyToMany
     @JoinTable(
             name = "employee_availability",
-            joinColumns = @JoinColumn(name = "availability_id"),
-            inverseJoinColumns = @JoinColumn(name = "employee_id")
+            joinColumns = @JoinColumn(name = "employee_id"),
+            inverseJoinColumns = @JoinColumn(name = "availability_id")
     )
-    private Set<Availability> daysAvailable = new HashSet<>();
+    private Set<Availability> daysAvailable;
 
     public Employee() {
     }
