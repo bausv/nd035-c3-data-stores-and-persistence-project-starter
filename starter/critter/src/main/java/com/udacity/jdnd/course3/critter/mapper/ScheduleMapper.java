@@ -15,6 +15,16 @@ public class ScheduleMapper {
         Schedule s = new Schedule();
         s.setActivities(scheduleDTO.getActivities());
         s.setDate(scheduleDTO.getDate());
+        s.setEmployees(scheduleDTO.getEmployeeIds().stream().map(e -> {
+            Employee em = new Employee();
+            em.setId(e);
+            return em;
+        }).collect(Collectors.toSet()));
+        s.setPets(scheduleDTO.getPetIds().stream().map(pid -> {
+            Pet p = new Pet();
+            p.setId(pid);
+            return p;
+        }).collect(Collectors.toSet()));
         return s;
     }
 

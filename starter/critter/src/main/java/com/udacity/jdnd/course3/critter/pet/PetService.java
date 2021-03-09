@@ -1,70 +1,44 @@
 package com.udacity.jdnd.course3.critter.pet;
 
-import com.udacity.jdnd.course3.critter.mapper.CustomerMapper;
-import com.udacity.jdnd.course3.critter.mapper.PetMapper;
 import com.udacity.jdnd.course3.critter.model.Customer;
 import com.udacity.jdnd.course3.critter.model.CustomerRepository;
 import com.udacity.jdnd.course3.critter.model.Pet;
 import com.udacity.jdnd.course3.critter.model.PetRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class PetService {
 
-    private PetMapper mapper;
-    private CustomerMapper customerMapper;
     private PetRepository repository;
     private CustomerRepository customerRepository;
 
-    public PetService(PetMapper mapper, CustomerMapper customerMapper, PetRepository repository, CustomerRepository customerRepository) {
-        this.mapper = mapper;
-        this.customerMapper = customerMapper;
+    public PetService(PetRepository repository, CustomerRepository customerRepository) {
         this.repository = repository;
         this.customerRepository = customerRepository;
     }
 
 
-    public PetDTO savePet(PetDTO petDTO) {
-        Pet entity = mapper.dtoToEntity(petDTO);
-        Optional<Customer> owner = customerRepository.findById(petDTO.getOwnerId());
+    public Pet savePet(Pet petIn) {
+        Optional<Customer> owner = petIn.getOwner() != null && petIn.getOwner().getId() > 0l ? customerRepository.findById(petIn.getOwner().getId()) : Optional.empty();
         if (owner.isPresent()) {
-            entity.setOwner(owner.get());
+            petIn.setOwner(owner.get());
         }
-        Pet saved = repository.save(entity);
-        PetDTO dto = mapper.entityToDTO(saved);
-        if (saved.getOwner() != null) {
-            dto.setOwnerId(saved.getOwner().getId());
-        }
-        return dto;
+        Pet saved = repository.save(petIn);
+        return saved;
     }
 
-    public PetDTO getPet(long petId) {
-        return mapper.entityToDTO(repository.findById(petId).orElseThrow());
+    public Pet getPet(long petId) throws PetNotFoundException {
+        return repository.findById(petId).orElseThrow(() -> new PetNotFoundException(petId));
     }
 
-    public List<PetDTO> getPetsByOwner(long ownerId) {
-        return repository.findByOwnerId(ownerId).stream().map(p -> mapper.entityToDTO(p)).collect(Collectors.toList());
+    public List<Pet> getPetsByOwner(long ownerId) {
+        return repository.findByOwnerId(ownerId);
     }
 
-    public Set<Pet> idListToPetSet(List<Long> ids) {
-        if (ids != null && !ids.isEmpty()) {
-            return repository.findAllById(ids).stream().collect(Collectors.toSet());
-        } else {
-            return Collections.emptySet();
-        }
-    }
-
-    public List<Long> petSetToIdList(Set<Pet> pets) {
-        return pets.stream().map(p -> p.getId()).collect(Collectors.toList());
-    }
-
-    public List<PetDTO> getPets() {
-        return repository.findAll().stream().map(p -> mapper.entityToDTO(p)).collect(Collectors.toList());
+    public List<Pet> getPets() {
+        return repository.findAll();
     }
 }
