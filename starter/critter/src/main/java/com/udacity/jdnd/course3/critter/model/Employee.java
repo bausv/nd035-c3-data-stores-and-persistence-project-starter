@@ -2,10 +2,7 @@ package com.udacity.jdnd.course3.critter.model;
 
 import com.udacity.jdnd.course3.critter.user.EmployeeSkill;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.time.DayOfWeek;
 import java.util.HashSet;
 import java.util.Set;
@@ -13,38 +10,30 @@ import java.util.Set;
 @Entity
 public class Employee extends Person {
 
-    @ManyToMany
-    @JoinTable(
-            name = "employee_skill",
-            joinColumns = @JoinColumn(name = "employee_id"),
-            inverseJoinColumns = @JoinColumn(name = "skill_id")
-    )
-    private Set<Skill> skills = new HashSet<>();
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
+    private Set<EmployeeSkill> skills = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(
-            name = "employee_availability",
-            joinColumns = @JoinColumn(name = "employee_id"),
-            inverseJoinColumns = @JoinColumn(name = "availability_id")
-    )
-    private Set<Availability> daysAvailable;
+    @ElementCollection
+    @Enumerated(EnumType.STRING)
+    private Set<DayOfWeek> daysAvailable;
 
     public Employee() {
     }
 
-    public Set<Skill> getSkills() {
+    public Set<EmployeeSkill> getSkills() {
         return skills;
     }
 
-    public void setSkills(Set<Skill> skills) {
+    public void setSkills(Set<EmployeeSkill> skills) {
         this.skills = skills;
     }
 
-    public Set<Availability> getDaysAvailable() {
+    public Set<DayOfWeek> getDaysAvailable() {
         return daysAvailable;
     }
 
-    public void setDaysAvailable(Set<Availability> daysAvailable) {
+    public void setDaysAvailable(Set<DayOfWeek> daysAvailable) {
         this.daysAvailable = daysAvailable;
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -31,15 +32,15 @@ public class PetService {
 
     public PetDTO savePet(PetDTO petDTO) {
         Pet entity = mapper.dtoToEntity(petDTO);
-        Customer owner = customerRepository.findById(petDTO.getOwnerId()).orElseGet(() -> {
-            Customer c = new Customer();
-            c.setId(petDTO.getOwnerId());
-            return c;
-        });
-        entity.setOwner(owner);
+        Optional<Customer> owner = customerRepository.findById(petDTO.getOwnerId());
+        if (owner.isPresent()) {
+            entity.setOwner(owner.get());
+        }
         Pet saved = repository.save(entity);
         PetDTO dto = mapper.entityToDTO(saved);
-        dto.setOwnerId(saved.getOwner().getId());
+        if (saved.getOwner() != null) {
+            dto.setOwnerId(saved.getOwner().getId());
+        }
         return dto;
     }
 
@@ -61,5 +62,9 @@ public class PetService {
 
     public List<Long> petSetToIdList(Set<Pet> pets) {
         return pets.stream().map(p -> p.getId()).collect(Collectors.toList());
+    }
+
+    public List<PetDTO> getPets() {
+        return repository.findAll().stream().map(p -> mapper.entityToDTO(p)).collect(Collectors.toList());
     }
 }

@@ -53,6 +53,50 @@ public abstract class AbstractBaseEntity {
         this.id = id;
     }
 
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+    @NonNull
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(@NonNull String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    @NonNull
+    public LocalDateTime getCreated() {
+        return created;
+    }
+
+    public void setCreated(@NonNull LocalDateTime created) {
+        this.created = created;
+    }
+
+    @NonNull
+    public String getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(@NonNull String lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+    }
+
+    @NonNull
+    public LocalDateTime getLastModified() {
+        return lastModified;
+    }
+
+    public void setLastModified(@NonNull LocalDateTime lastModified) {
+        this.lastModified = lastModified;
+    }
+
     @Override
     public String toString() {
         return "id=" + id +

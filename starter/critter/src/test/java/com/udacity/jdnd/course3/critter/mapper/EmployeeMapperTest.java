@@ -1,9 +1,8 @@
 package com.udacity.jdnd.course3.critter.mapper;
 
+import com.google.common.collect.Sets;
 import com.udacity.jdnd.course3.critter.CritterApplication;
-import com.udacity.jdnd.course3.critter.model.Availability;
 import com.udacity.jdnd.course3.critter.model.Employee;
-import com.udacity.jdnd.course3.critter.model.Skill;
 import com.udacity.jdnd.course3.critter.user.EmployeeDTO;
 import com.udacity.jdnd.course3.critter.user.EmployeeSkill;
 import org.junit.jupiter.api.Test;
@@ -29,8 +28,8 @@ class EmployeeMapperTest {
     public void testEntityToDTO() {
         Employee e = new Employee();
         e.setName("aName");
-        e.setSkills(Arrays.asList(new Skill(EmployeeSkill.FEEDING)).stream().collect(Collectors.toSet()));
-        e.setDaysAvailable(Arrays.asList(new Availability(DayOfWeek.MONDAY), new Availability(DayOfWeek.WEDNESDAY)).stream().collect(Collectors.toSet()));
+        e.setSkills(Sets.newHashSet(EmployeeSkill.FEEDING));
+        e.setDaysAvailable(Sets.newHashSet(DayOfWeek.MONDAY, DayOfWeek.WEDNESDAY));
         EmployeeDTO dto = mapper.entityToDTO(e);
         assertThat(dto).isNotNull();
         assertThat(dto.getName()).isEqualTo(e.getName());
@@ -51,8 +50,8 @@ class EmployeeMapperTest {
         assertThat(e).isNotNull();
         assertThat(e.getId()).isEqualTo(dto.getId());
         assertThat(e.getName()).isEqualTo(dto.getName());
-        assertThat(e.getDaysAvailable().stream().map(a -> a.getDayOfWeek())).containsExactlyInAnyOrderElementsOf(daysAvailable);
-        assertThat(e.getSkills().stream().map(s -> s.getSkill())).containsExactlyInAnyOrderElementsOf(skills);
+        assertThat(e.getDaysAvailable()).containsExactlyInAnyOrderElementsOf(daysAvailable);
+        assertThat(e.getSkills()).containsExactlyInAnyOrderElementsOf(skills);
     }
 
 }

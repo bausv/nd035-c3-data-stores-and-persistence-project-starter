@@ -21,6 +21,7 @@ public class PetMapper {
         p.setNotes(dto.getNotes());
         p.setBirthDate(dto.getBirthDate());
         p.setType(dto.getType());
+        p.setName(dto.getName());
         if (dto.getId() > 0) {
             p.setId(dto.getId());
         }

@@ -29,7 +29,7 @@ public class PetController {
 
     @GetMapping
     public List<PetDTO> getPets(){
-        throw new UnsupportedOperationException();
+        return petService.getPets();
     }
 
     @GetMapping("/owner/{ownerId}")
