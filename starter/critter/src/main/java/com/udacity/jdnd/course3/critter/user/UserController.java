@@ -76,7 +76,9 @@ public class UserController {
 
     @GetMapping("/employee/availability")
     public List<EmployeeDTO> findEmployeesForService(@RequestBody EmployeeRequestDTO employeeDTO) {
-        return employeeService.findEmployeesForService(employeeDTO).stream().map(e -> employeeMapper.entityToDTO(e)).collect(Collectors.toList());
+        DayOfWeek dayOfWeek = employeeDTO.getDate().getDayOfWeek();
+        Set<EmployeeSkill> skills = employeeDTO.getSkills();
+        return employeeService.findEmployeesForService(dayOfWeek, skills).stream().map(e -> employeeMapper.entityToDTO(e)).collect(Collectors.toList());
     }
 
     private CustomerDTO doMapCustomerEntityWithPets(Customer c) {
